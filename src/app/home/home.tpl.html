@@ -1,0 +1,16 @@
+<leaflet height="100%" width="100%" leafletMap="leafletMap"></leaflet>
+<div class="map_overlay">
+  <div class="span3 bordered">
+  <label>Select Agency</label>
+  <select ui-select2="" ng-model="current_agency">
+    <option ng-repeat="agency in agencies" value="{{ $index }}">{{ agency.name }}</option>
+  </select>
+  {{ current_agency }}
+  <p ng-show="current_agency">
+    <b>{{ agencies[current_agency].name }}</b><br>
+    Location: {{ agencies[current_agency].area+" "+agencies[current_agency].state }} <br>
+    <a class="btn" href="" ng-click="loadAgency(agencies[current_agency].id)">Load Data</a>
+  </p>
+  
+  </div>
+</div>
