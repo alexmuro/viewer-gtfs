@@ -57,7 +57,7 @@ angular.module( 'transitAnalyst.home', [
         
         $http({url:'http://localhost:1337/agency/'+agency_id+'/routes/',method:"GET"}).success(function(data){
                   
-          //d3.select("svg").remove(); 
+          d3.select("svg").remove(); 
           //clear previous 
 
           var routes = topojson.feature(data, data.objects.routes);
