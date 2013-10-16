@@ -45,9 +45,8 @@ angular.module( 'transitAnalyst.home', [
     });
 
     $scope.agencies = {};
-    $http({url:'http://localhost:1337/agency',method:"GET"}).success(function(data){
+    $http({url:'http://api.availabs.org/gtfs/agency',method:"GET"}).success(function(data){
         $scope.agencies= data;
-        console.log(data);
     });
     
   
@@ -55,35 +54,61 @@ angular.module( 'transitAnalyst.home', [
     
     $scope.loadAgency = function(agency_id){
         
-        $http({url:'http://localhost:1337/agency/'+agency_id+'/routes/',method:"GET"}).success(function(data){
-                  
+      $http({url:'http://api.availabs.org/gtfs/agency/'+agency_id+'/routes/',method:"GET"}).success(function(data){
+        var routesData = data;
+        $http({url:'http://api.availabs.org/gtfs/agency/'+agency_id+'/stops/',method:"GET"}).success(function(data){                
+          
+          console.log(data);
           d3.select("svg").remove(); 
           //clear previous 
 
-          var routes = topojson.feature(data, data.objects.routes);
+          var stopsData = data;
+          var stops = topojson.feature(stopsData, stopsData.objects.stops);
+          var routes = topojson.feature(routesData, routesData.objects.routes);
           var svg = d3.select($scope.leafletMap.getPanes().overlayPane).append("svg");
           var g = svg.append("g").attr("class", "leaflet-zoom-hide routes");
+          var stopg = svg.append("g").attr("class", "leaflet-zoom-hide stops");
           var path = d3.geo.path().projection($scope.project);
           var bounds = d3.geo.bounds(routes);
           //$scope.leafletMap.fitBounds([bounds[0].reverse(),bounds[1].reverse()]);
           
-          feature=g.selectAll("path.route")
+          var feature=g.selectAll("path.route")
             .data(routes.features)
           .enter().append("path")
             .attr("class", function(d) { return "route"; })
             .attr("d", path)
             .attr("stroke",function(d){ 
-              //if()
-              return "#0f0";
-              //return "#"+d.properties.route_color ;
+              if(typeof d.properties.route_color == 'undefined'){
+                return "#0f0";
+              }else{
+                return "#"+d.properties.route_color;
+              }
+            });
+
+          var stopfeature = stopg.selectAll("circle.stop")
+            .data(stops.features)
+          .enter()
+            .append("circle")
+            .classed("stop", true)
+            .attr({
+              r: 2,
+              cx: function(d,i) { 
+                return $scope.project(d.geometry.coordinates)[0]; 
+              },
+              cy: function(d,i) { 
+                return $scope.project(d.geometry.coordinates)[1]; 
+              },
+              "fill": '#ED3A2D'
             });
 
             $scope.leafletMap.on("viewreset", function(){
               $scope.reset(bounds,feature,svg,g,path);
+              $scope.reset(bounds,stopfeature,svg,stopg,path);
             });
             $scope.reset(bounds,feature,svg,g,path);
+            $scope.reset(bounds,stopfeature,svg,stopg,path);
         });
-      
+      }); 
     };
     $scope.loadAgency(1);
 

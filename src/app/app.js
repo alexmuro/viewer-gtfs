@@ -19,10 +19,8 @@ angular.module( 'transitAnalyst', [
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
   $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
     if ( angular.isDefined( toState.data.pageTitle ) ) {
-      $scope.pageTitle = toState.data.pageTitle + ' | TransitAnalyst' ;
+      $scope.pageTitle = toState.data.pageTitle + ' | GTFSAnalyst' ;
     }
   });
-})
-
-;
+});
 

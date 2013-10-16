@@ -3,7 +3,7 @@ var leafletDirective = angular.module("leaflet-directive", []);
 leafletDirective.directive('leaflet', function ($http, $log, $parse, $rootScope) {
 
     var defaults = {
-        maxZoom: 14,
+        maxZoom: 18,
         minZoom: 1,
         doubleClickZoom: true,
         scrollWheelZoom: true,
@@ -11,7 +11,8 @@ leafletDirective.directive('leaflet', function ($http, $log, $parse, $rootScope)
         attributionControl: true,
         zoomsliderControl: false,
         controlLayersPosition: 'topright',
-        tileLayer: 'http://{s}.tile.cloudmade.com/117aaa97872a451db8e036485c9f464b/998/256/{z}/{x}/{y}.png',
+        tileLayer: 'http://{s}.tiles.mapbox.com/v3/am3081.map-lkbhqenw/{z}/{x}/{y}.png',
+        //tileLayer: 'http://{s}.tile.cloudmade.com/117aaa97872a451db8e036485c9f464b/998/256/{z}/{x}/{y}.png',
         tileLayerOptions: {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         },
