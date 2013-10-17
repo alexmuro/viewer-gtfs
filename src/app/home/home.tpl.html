@@ -16,13 +16,13 @@
   <tabset>
     <tab heading="Agency">
       <div class="span3 bordered">
-        Name:{{ loaded_agency.name }}<br>
-        Area: {{ loaded_agency.area }}<br>
-        State:{{ loaded_agency.area }}<br>
-        URL: {{loaded_agency.url}}<br>
-        GTFS License: {{loaded_agency.license_url}}<br>
-        gtfs-data-exchange URL: {{loaded_agency.dataexchange_url}}<br>
-        Last Updated: {{ loaded_agency.date_last_updated | date:'medium' }}
+        <b>Name</b>:{{ loaded_agency.name }}<br>
+        <b>Area</b>: {{ loaded_agency.area }}<br>
+        <b>State</b>:{{ loaded_agency.state }}<br>
+       <b>URL</b>: {{loaded_agency.url}}<br>
+        <b>GTFS License</b>: {{ loaded_agency.license_url }}<br>
+        <b>gtfs-data-exchange URL</b>: {{ loaded_agency.dataexchange_url }}<br>
+        <b>Last Updated</b>: {{ loaded_agency.date_last_updated*1000 | date:'medium' }}
       </div>
   </tab>
     <tab heading="Stops">
