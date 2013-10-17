@@ -1,16 +1,64 @@
 <leaflet height="100%" width="100%" leafletMap="leafletMap"></leaflet>
-<div class="map_overlay">
+<div class="select_overlay">
   <div class="span3 bordered">
   <label>Select Agency</label>
   <select ui-select2="" ng-model="current_agency">
     <option ng-repeat="agency in agencies" value="{{ $index }}">{{ agency.name }}</option>
   </select>
-  {{ current_agency }}
   <p ng-show="current_agency">
     <b>{{ agencies[current_agency].name }}</b><br>
     Location: {{ agencies[current_agency].area+" "+agencies[current_agency].state }} <br>
     <a class="btn" href="" ng-click="loadAgency(agencies[current_agency].id)">Load Data</a>
   </p>
-  
-  </div>
+</div>
+</div>
+<div class="info_overlay" ng-show="loaded">
+  <tabset>
+    <tab heading="Agency">
+      <div class="span3 bordered">
+        Name:{{ loaded_agency.name }}<br>
+        Area: {{ loaded_agency.area }}<br>
+        State:{{ loaded_agency.area }}<br>
+        URL: {{loaded_agency.url}}<br>
+        GTFS License: {{loaded_agency.license_url}}<br>
+        gtfs-data-exchange URL: {{loaded_agency.dataexchange_url}}<br>
+        Last Updated: {{ loaded_agency.date_last_updated | date:'medium' }}
+      </div>
+  </tab>
+    <tab heading="Stops">
+      <div class="span3 bordered">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Stop ID</th>
+              <th>Stop Code</th>
+              <th>Stop Name</th> 
+          </thead>
+          <tr ng-repeat="stop in stops">
+            <td>{{ stop.stop_id }}</td>
+            <td>{{ stop.stop_code }}</td>
+            <td>{{ stop.stop_name }}</td>
+          </tr>
+        </table>
+      </div>
+    </tab>
+    <tab heading="Routes">
+      <div class="span3 bordered">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Route ID</th>
+              <th>Short Name</th>
+              <th>Long Name</th>
+            </tr>
+          </thead>
+          <tr ng-repeat="route in routes" style="color:#{{ route.route_color }}">
+            <td>{{ route.route_id }}</td>
+            <td>{{ route.route_short_name }}</td>
+            <td>{{ route.route_long_name }}</td>
+          </tr>
+        </table>
+      </div>
+    </tab>
+  </tabset>
 </div>

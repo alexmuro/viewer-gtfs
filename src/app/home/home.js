@@ -14,7 +14,8 @@
  */
 angular.module( 'transitAnalyst.home', [
   'ui.state',
-  'leaflet-directive'
+  'leaflet-directive',
+  'ui.bootstrap'
 ])
 
 /**
@@ -31,7 +32,7 @@ angular.module( 'transitAnalyst.home', [
         templateUrl: 'home/home.tpl.html'
       }
     },
-    data:{ pageTitle: 'Home' }
+    data:{ pageTitle: 'GTFS Analyst' }
   });
 })
 
@@ -45,10 +46,13 @@ angular.module( 'transitAnalyst.home', [
     });
 
     $scope.agencies = {};
+    $scope.loaded = false;
     $http({url:'http://api.availabs.org/gtfs/agency',method:"GET"}).success(function(data){
         $scope.agencies= data;
     });
-    
+    $scope.routes =[];
+    $scope.stops = [];
+    $scope.loaded_agency = {};
   
 
     
@@ -58,7 +62,6 @@ angular.module( 'transitAnalyst.home', [
         var routesData = data;
         $http({url:'http://api.availabs.org/gtfs/agency/'+agency_id+'/stops/',method:"GET"}).success(function(data){                
           
-          console.log(data);
           d3.select("svg").remove(); 
           //clear previous 
 
@@ -70,12 +73,16 @@ angular.module( 'transitAnalyst.home', [
           var stopg = svg.append("g").attr("class", "leaflet-zoom-hide stops");
           var path = d3.geo.path().projection($scope.project);
           var bounds = d3.geo.bounds(routes);
-          //$scope.leafletMap.fitBounds([bounds[0].reverse(),bounds[1].reverse()]);
+          
+          $scope.routes =[];
+          $scope.stops = [];
           
           var feature=g.selectAll("path.route")
             .data(routes.features)
           .enter().append("path")
-            .attr("class", function(d) { return "route"; })
+            .attr("class", function(d) { 
+                $scope.routes.push(d.properties);
+                return "route"; })
             .attr("d", path)
             .attr("stroke",function(d){ 
               if(typeof d.properties.route_color == 'undefined'){
@@ -92,7 +99,8 @@ angular.module( 'transitAnalyst.home', [
             .classed("stop", true)
             .attr({
               r: 2,
-              cx: function(d,i) { 
+              cx: function(d,i) {
+                $scope.stops.push(d.properties); 
                 return $scope.project(d.geometry.coordinates)[0]; 
               },
               cy: function(d,i) { 
@@ -105,12 +113,17 @@ angular.module( 'transitAnalyst.home', [
               $scope.reset(bounds,feature,svg,g,path);
               $scope.reset(bounds,stopfeature,svg,stopg,path);
             });
+            //$scope.leafletMap.fitBounds([bounds[0].reverse(),bounds[1].reverse()]);
             $scope.reset(bounds,feature,svg,g,path);
             $scope.reset(bounds,stopfeature,svg,stopg,path);
         });
-      }); 
+      });
+      $scope.loaded = true;
+      $scope.loaded_agency = $scope.agencies[$scope.current_agency];
+      console.log($scope.loaded_agency);
+      console.log($scope.routes);
     };
-    $scope.loadAgency(1);
+    //$scope.loadAgency(1);
 
     $scope.project = function(x) {
               var point = $scope.leafletMap.latLngToLayerPoint(new L.LatLng(x[1], x[0]));
@@ -120,7 +133,7 @@ angular.module( 'transitAnalyst.home', [
     $scope.reset =function(bounds,feature,svg,g,path) {            
         var bottomLeft = $scope.project(bounds[0]),
         topRight = $scope.project(bounds[1]);
-
+        
         svg .attr("width", topRight[0] - bottomLeft[0])
           .attr("height", bottomLeft[1] - topRight[1])
           .style("margin-left", bottomLeft[0] + "px")
