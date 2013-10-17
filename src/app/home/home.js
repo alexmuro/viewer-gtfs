@@ -90,6 +90,16 @@ angular.module( 'transitAnalyst.home', [
               }else{
                 return "#"+d.properties.route_color;
               }
+            })
+            .on("mouseover", function(d){
+              var textTitle = "<p>";
+              textTitle += "<strong>Route ID:</strong>" + d.properties["route_id"] + "<br>";
+              textTitle += "<strong>Route Short Name:</strong>" + d.properties['route_short_name'] + "<br>";
+              textTitle += "<strong>Route Long Name:</strong>" + d.properties['route_long_name']+ "<br>";
+              $("#info").show().html(textTitle);
+            })
+            .on("mouseout", function(self) {
+              $("#info").hide().html("");
             });
 
           var stopfeature = stopg.selectAll("circle.stop")
@@ -107,6 +117,16 @@ angular.module( 'transitAnalyst.home', [
                 return $scope.project(d.geometry.coordinates)[1]; 
               },
               "fill": '#ED3A2D'
+            })
+            .on("mouseover", function(d){
+              var textTitle = "<p>";
+              textTitle += "<strong>Stop ID:</strong>" + d.properties["stop_id"] + "<br>";
+              textTitle += "<strong>Stop Code:</strong>" + d.properties['stop_code'] + "<br>";
+              textTitle += "<strong>Stop Name:</strong>" + d.properties['stop_name']+ "<br>";
+              $("#info").show().html(textTitle);
+            })
+            .on("mouseout", function(self) {
+              $("#info").hide().html("");
             });
 
             $scope.leafletMap.on("viewreset", function(){
@@ -120,8 +140,6 @@ angular.module( 'transitAnalyst.home', [
       });
       $scope.loaded = true;
       $scope.loaded_agency = $scope.agencies[$scope.current_agency];
-      console.log($scope.loaded_agency);
-      console.log($scope.routes);
     };
     //$scope.loadAgency(1);
 
@@ -155,6 +173,10 @@ angular.module( 'transitAnalyst.home', [
                 return $scope.project(d.geometry.coordinates)[1]; 
               });
           } 
+    };
+
+    $scope.setLocation = function(e){
+      console.log('test',e);
     };
 
 });

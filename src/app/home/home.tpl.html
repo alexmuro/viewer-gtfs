@@ -2,7 +2,7 @@
 <div class="select_overlay">
   <div class="span3 bordered">
   <label>Select Agency</label>
-  <select ui-select2="" ng-model="current_agency">
+  <select class="angency_select"  ng-model="current_agency">
     <option ng-repeat="agency in agencies" value="{{ $index }}">{{ agency.name }}</option>
   </select>
   <p ng-show="current_agency">
@@ -19,9 +19,9 @@
         <b>Name</b>:{{ loaded_agency.name }}<br>
         <b>Area</b>: {{ loaded_agency.area }}<br>
         <b>State</b>:{{ loaded_agency.state }}<br>
-       <b>URL</b>: {{loaded_agency.url}}<br>
-        <b>GTFS License</b>: {{ loaded_agency.license_url }}<br>
-        <b>gtfs-data-exchange URL</b>: {{ loaded_agency.dataexchange_url }}<br>
+        <b>URL</b>: <a href="{{loaded_agency.url}}">{{loaded_agency.url}}</a><br>
+        <b>GTFS License</b>: <a href="{{ loaded_agency.license_url }}">{{ loaded_agency.license_url }}</a><br>
+        <b>gtfs-data-exchange URL</b>: <a href="{{ loaded_agency.dataexchange_url }}">{{ loaded_agency.dataexchange_url }}</a><br>
         <b>Last Updated</b>: {{ loaded_agency.date_last_updated*1000 | date:'medium' }}
       </div>
   </tab>

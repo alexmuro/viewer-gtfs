@@ -10,6 +10,8 @@
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
 
     <!-- Include Assets -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/popup.js"></script>
     <script src="assets/js/leaftlet.js"></script>
     <script src="assets/js/topojson.js"></script>
     <script src="assets/js/ui-bootstrap-tpls.js"></script>
@@ -20,6 +22,7 @@
 
   </head>
   <body>
-    <div class="map" ui-view="main"></div>
+    <div id="map" class="map" ui-view="main" ng-mousemove="setLocation($event)"></div>
+    <div id="info"></div>
   </body>
 </html>
