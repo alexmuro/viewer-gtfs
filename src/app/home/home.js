@@ -85,9 +85,10 @@ angular.module( 'transitAnalyst.home', [
                 return "route"; })
             .attr("d", path)
             .attr("stroke",function(d){ 
-              if(typeof d.properties.route_color == 'undefined'){
+              if(typeof d.properties.route_color == 'undefined' || d.properties.route_color == null){
                 return "#0f0";
               }else{
+                console.log('rc',d.properties.route_color);
                 return "#"+d.properties.route_color;
               }
             })
